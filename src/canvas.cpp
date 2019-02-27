@@ -35,7 +35,7 @@ void Canvas::drawPoint(Point p) {
         return;
     }
     int p_index = p.getX()*width*3 + p.getY()*3;
-    pixels[p_index] = p.getColor()[R];
-    pixels[p_index + 1] = p.getColor()[G];
-    pixels[p_index + 2] = p.getColor()[B];
+    pixels[p_index] = p.getColor().red();
+    pixels[p_index + 1] = p.getColor().green();
+    pixels[p_index + 2] = p.getColor().blue();
 }

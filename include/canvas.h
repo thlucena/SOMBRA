@@ -3,19 +3,42 @@
 #include <memory>
 
 typedef unsigned char uchar;
-enum Color { R = 0, G, B };
+enum RGB { R = 0, G, B };
+
+class Color {
+    private:
+        uchar values[3] {0}; // default color 0
+    public:
+        Color() {}
+        Color(uchar r, uchar g, uchar b) {
+            values[R] = r;
+            values[G] = g;
+            values[B] = b;
+        }
+        uchar red() { return values[R]; }
+        uchar green() { return values[G]; }
+        uchar blue() { return values[B]; }
+        uchar* getValues() {
+            return values;
+        }
+        void setValues(uchar r, uchar g, uchar b) {
+            values[R] = r;
+            values[G] = g;
+            values[B] = b;
+        }
+};
 
 class Point {
     private:
         int x, y;
-        /// Default color is black
-        uchar color[3] {0};
+        Color color = Color();
     public:
         Point(int, int);
         Point(int, int, uchar, uchar, uchar);
-        uchar* getColor();
         int getX();
         int getY();
+        Color getColor();
+        void setColor(uchar, uchar, uchar);
 };
 
 class Canvas {
@@ -27,6 +50,7 @@ class Canvas {
         Canvas(int, int);
         void printToFile();
         void drawPoint(Point);
+        void drawLineBresenham(Point, Point, Color);
 };
 
 #endif
