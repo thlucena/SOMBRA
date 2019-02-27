@@ -28,13 +28,13 @@ class Color {
         }
 };
 
-class Point {
+class Pixel {
     private:
         int x, y;
         Color color = Color();
     public:
-        Point(int, int);
-        Point(int, int, uchar, uchar, uchar);
+        Pixel(int, int);
+        Pixel(int, int, uchar, uchar, uchar);
         int getX();
         int getY();
         Color getColor();
@@ -49,8 +49,9 @@ class Canvas {
         Canvas();
         Canvas(int, int);
         void printToFile();
-        void drawPoint(Point);
-        void drawLineBresenham(Point, Point, Color);
+        void drawPixel(Pixel);
+        void drawPixel(int, int, Color);
+        void drawLineBresenham(Pixel, Pixel, Color);
 };
 
 #endif
