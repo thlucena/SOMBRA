@@ -61,64 +61,62 @@ void Canvas::drawLineBresenham(Pixel start_p, Pixel end_p, Color color) {
         return;
     }
 
-    // switch points if not from left to right
-    if (start_p.getX() > end_p.getX()) {
-        Pixel aux = start_p;
-        start_p = end_p;
-        end_p = aux;
-    }
-
-    int delta_X = end_p.getX() - start_p.getX();
     int delta_Y = end_p.getY() - start_p.getY();
-    double m = delta_Y / delta_X;
+    int delta_X = end_p.getX() - start_p.getX();
+    int p_k, x, y;
+    
+    if ( abs(delta_Y) < abs(delta_X) ) {
+        // switch points if not from left to right
+        if (start_p.getX() > end_p.getX()) {
+            Pixel aux = start_p;
+            start_p = end_p;
+            end_p = aux;
+        }
 
-    int p_k, x, y, end_x, end_y;
-    x = start_p.getX();
-    y = start_p.getY();
-    end_x = end_p.getX();
-    end_y = end_p.getY();
-
-    drawPixel(x, y, color);
-
-    if (-1 <= m <= 1) {
-        // x always increase
-        // y coordinate might not change
-        int y_i, p_k;
-        if (m >= 0) { 
-            y_i = -1; // increasing line
-            delta_Y = -delta_Y; 
-        } else {
-            y_i = 1; // decreasing line
+        delta_X = end_p.getX() - start_p.getX();
+        delta_Y = end_p.getY() - start_p.getY();
+        int y_i = 1;
+        if (delta_Y < 0) {
+            y_i = -1;
+            delta_Y = -delta_Y;
         }
         p_k = 2*delta_Y - delta_X;
+        y = start_p.getY();
 
-        for(x = x+1; x < end_x; x++) {
-            p_k = p_k + 2*delta_Y;
+        for(x = start_p.getX(); x <= end_p.getX(); x++) {
+            drawPixel(x, y, color);
             if (p_k > 0) {
                 y = y + y_i;
                 p_k = p_k - 2*delta_X;
             }
-            drawPixel(x, y, color);
+            p_k = p_k + 2*delta_Y;
         }
+        
     } else {
-        // y always increase
-        // x coordinate might not change
-        int x_i, p_k;
-        if (m > 0) { 
-            x_i = 1; // increasing line
-        } else {
-            x_i = -1; // decreasing line
-            delta_X = -delta_X; 
+        // switch points if not from bottom to top
+        if (start_p.getY() > end_p.getY()) {
+            Pixel aux = start_p;
+            start_p = end_p;
+            end_p = aux;
+        }
+
+        delta_X = end_p.getX() - start_p.getX();
+        delta_Y = end_p.getY() - start_p.getY();
+        int x_i = 1;
+        if (delta_X < 0) {
+            x_i = -1;
+            delta_X = -delta_X;
         }
         p_k = 2*delta_X - delta_Y;
+        x = start_p.getX();
 
-        for(y = y+1; y < end_y; y++) {
-            p_k = p_k + 2*delta_X;
+        for(y = start_p.getY(); y <= end_p.getY(); y++) {
+            drawPixel(x, y, color);
             if (p_k > 0) {
                 x = x + x_i;
                 p_k = p_k - 2*delta_Y;
             }
-            drawPixel(x, y, color);
+            p_k = p_k + 2*delta_X;
         }
     }
 }
