@@ -52,6 +52,7 @@ class Canvas {
         void drawPixel(Pixel);
         void drawPixel(int, int, Color);
         void drawLineBresenham(Pixel, Pixel, Color);
+        void drawCircle(Pixel, int, Color);
 };
 
 #endif

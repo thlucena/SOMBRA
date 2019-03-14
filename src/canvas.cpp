@@ -120,3 +120,39 @@ void Canvas::drawLineBresenham(Pixel start_p, Pixel end_p, Color color) {
         }
     }
 }
+
+void Canvas::drawCircle(Pixel center_p, int radius, Color color) {
+    // check if center_p is valid
+    if (center_p.getX() < 0 || center_p.getX() > width || center_p.getY() < 0 || center_p.getY() > height) {
+        return;
+    }
+    
+    int x = 0;
+    int y = radius;
+    int d = 1 - radius;
+    int delta_E = 3;
+    int delta_SE = -2 * radius + 5;
+
+    do {
+        drawPixel(center_p.getX() + x, center_p.getY() + y, color);
+        drawPixel(center_p.getX() + y, center_p.getY() + x, color);
+        drawPixel(center_p.getX() - y, center_p.getY() + x, color);
+        drawPixel(center_p.getX() - x, center_p.getY() + y, color);
+        drawPixel(center_p.getX() - x, center_p.getY() - y, color);
+        drawPixel(center_p.getX() - y, center_p.getY() - x, color);
+        drawPixel(center_p.getX() + y, center_p.getY() - x, color);
+        drawPixel(center_p.getX() + x, center_p.getY() - y, color);
+
+        if (d < 0) {
+            d += delta_E;
+            delta_E += 2;
+            delta_SE += 2;
+        } else {
+            d += delta_SE;
+            delta_E += 2;
+            delta_SE += 4;
+            y--;
+        }
+        x++;
+    } while (y >= x);    
+}
