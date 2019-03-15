@@ -1,6 +1,7 @@
 #ifndef _CANVAS_
 #define _CANVAS_
 #include <memory>
+#include <vector>
 
 typedef unsigned char uchar;
 enum RGB { R = 0, G, B };
@@ -45,6 +46,8 @@ class Canvas {
     private:
         int width, height;
         std::shared_ptr<uchar[]> pixels;
+        bool isValidCoordinate(Pixel);
+        bool isValidCoordinate(int, int);
     public:
         Canvas();
         Canvas(int, int);
@@ -53,6 +56,8 @@ class Canvas {
         void drawPixel(int, int, Color);
         void drawLineBresenham(Pixel, Pixel, Color);
         void drawCircle(Pixel, int, Color);
+        void drawPolyline(std::vector<Pixel>&, Color);
+        void drawPolygon(std::vector<Pixel>&, Color);
 };
 
 #endif

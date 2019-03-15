@@ -1,6 +1,8 @@
 #include "canvas.h"
 #include <algorithm>
 #include <fstream>
+#include <vector>
+#include <iostream>
 
 Canvas::Canvas() {
     width = 800;
@@ -14,6 +16,14 @@ Canvas::Canvas(int w, int h) {
     height = h;
     pixels = std::shared_ptr<uchar[]>(new uchar[width*height*3]);
     std::fill(pixels.get(), pixels.get() + (width * height * 3), 255);
+}
+
+bool Canvas::isValidCoordinate(Pixel point) {
+    return point.getX() >= 0 && point.getX() < width && point.getY() >= 0 && point.getY() < height;
+}
+
+bool Canvas::isValidCoordinate(int x, int y) {
+    return x >= 0 && x < width && y >= 0 && y < height;
 }
 
 void Canvas::printToFile() {
@@ -31,7 +41,7 @@ void Canvas::printToFile() {
 }
 
 void Canvas::drawPixel(Pixel p) {
-    if (p.getX() < 0 || p.getX() > width || p.getY() < 0 || p.getY() > height) {
+    if (!isValidCoordinate(p)) {
         return;
     }
     int p_index = p.getY()*width*3 + p.getX()*3;
@@ -41,7 +51,7 @@ void Canvas::drawPixel(Pixel p) {
 }
 
 void Canvas::drawPixel(int x, int y, Color color) {
-    if (x < 0 || x > width || y < 0 || y > height) {
+    if (!isValidCoordinate(x, y)) {
         return;
     }
     int p_index = y*width*3 + x*3;
@@ -52,12 +62,14 @@ void Canvas::drawPixel(int x, int y, Color color) {
 
 void Canvas::drawLineBresenham(Pixel start_p, Pixel end_p, Color color) {
     // check if start_p is valid
-    if (start_p.getX() < 0 || start_p.getX() > width || start_p.getY() < 0 || start_p.getY() > height) {
+    if (!isValidCoordinate(start_p)) {
+        std::cout << "S";
         return;
     }
 
     // check if end_p is valid
-    if (end_p.getX() < 0 || end_p.getX() > width || end_p.getY() < 0 || end_p.getY() > height) {
+    if (!isValidCoordinate(end_p)) {
+        std::cout << "E";
         return;
     }
 
@@ -123,7 +135,7 @@ void Canvas::drawLineBresenham(Pixel start_p, Pixel end_p, Color color) {
 
 void Canvas::drawCircle(Pixel center_p, int radius, Color color) {
     // check if center_p is valid
-    if (center_p.getX() < 0 || center_p.getX() > width || center_p.getY() < 0 || center_p.getY() > height) {
+    if (!isValidCoordinate(center_p)) {
         return;
     }
     
@@ -155,4 +167,37 @@ void Canvas::drawCircle(Pixel center_p, int radius, Color color) {
         }
         x++;
     } while (y >= x);    
+}
+
+void Canvas::drawPolyline(std::vector<Pixel>& points, Color color) {
+    if (points.size() < 2) {
+        return;
+    }
+
+    for(size_t i = 0; i < points.size(); i++) {
+        if (!isValidCoordinate(points[i])) {
+            return;
+        }
+    }
+
+    for(size_t i = 0; i < points.size() - 1; i++) {
+        drawLineBresenham(points[i], points[i+1], points[i].getColor());
+    }
+}
+
+void Canvas::drawPolygon(std::vector<Pixel>& points, Color color) {
+    if (points.size() < 3) {
+        return;
+    }
+
+    for(size_t i = 0; i < points.size(); i++) {
+        if (!isValidCoordinate(points[i])) {
+            return;
+        }
+    }
+
+    for(size_t i = 0; i < points.size() - 1; i++) {
+        drawLineBresenham(points[i], points[i+1], points[i].getColor());
+    }
+    drawLineBresenham(points[points.size() - 1], points[0], points[points.size() - 1].getColor());
 }
