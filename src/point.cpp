@@ -11,11 +11,11 @@ Pixel::Pixel(int x_coord, int y_coord, uchar red, uchar green, uchar blue) {
     color.setValues(red, green, blue);
 }
 
-int Pixel::getX() {
+int Pixel::getX() const{
     return x;
 }
 
-int Pixel::getY() {
+int Pixel::getY() const{
     return y;
 }
 
@@ -25,4 +25,11 @@ Color Pixel::getColor() {
 
 void Pixel::setColor(uchar red, uchar green, uchar blue) {
     color.setValues(red, green, blue);
+}
+
+bool Pixel::operator == (const Pixel& rhs) {
+    return this->x == rhs.getX() && this->y == rhs.getY();
+}
+bool Pixel::operator != (const Pixel& rhs) {
+    return !(*this == rhs);
 }

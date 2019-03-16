@@ -36,10 +36,12 @@ class Pixel {
     public:
         Pixel(int, int);
         Pixel(int, int, uchar, uchar, uchar);
-        int getX();
-        int getY();
+        int getX() const;
+        int getY() const;
         Color getColor();
         void setColor(uchar, uchar, uchar);
+        bool operator == (const Pixel&);
+        bool operator != (const Pixel&);
 };
 
 class Canvas {
@@ -48,6 +50,7 @@ class Canvas {
         std::shared_ptr<uchar[]> pixels;
         bool isValidCoordinate(Pixel);
         bool isValidCoordinate(int, int);
+        int calcAngle(int, int, int, int);
     public:
         Canvas();
         Canvas(int, int);
@@ -58,6 +61,7 @@ class Canvas {
         void drawCircle(Pixel, int, Color);
         void drawPolyline(std::vector<Pixel>&, Color);
         void drawPolygon(std::vector<Pixel>&, Color);
+        void drawArc(Pixel, Pixel, int, Color);
 };
 
 #endif

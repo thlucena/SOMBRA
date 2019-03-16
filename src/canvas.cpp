@@ -3,6 +3,8 @@
 #include <fstream>
 #include <vector>
 #include <iostream>
+#include <cmath>
+#define PI 3.14159265
 
 Canvas::Canvas() {
     width = 800;
@@ -200,4 +202,91 @@ void Canvas::drawPolygon(std::vector<Pixel>& points, Color color) {
         drawLineBresenham(points[i], points[i+1], points[i].getColor());
     }
     drawLineBresenham(points[points.size() - 1], points[0], points[points.size() - 1].getColor());
+}
+
+int Canvas::calcAngle(int x_1, int y_1, int x_2, int y_2) {
+    double dot = x_1*x_2 + y_1*y_2;
+    double det = x_1*y_2 - y_1*x_2;
+    int angle = static_cast<int>(std::atan2(det, dot) * 180 / PI);
+    if (angle < 0) { angle += 360; };
+    return angle;
+}
+
+void Canvas::drawArc(Pixel center_p, Pixel start_p, int angle, Color color) {
+    if (!isValidCoordinate(center_p)) {
+        return;
+    }
+
+    if (!isValidCoordinate(start_p)) {
+        return;
+    }
+
+    if (center_p == start_p) {
+        return;
+    }
+
+    if (angle <= 0) {
+        return;
+    }
+
+    int s_1 = start_p.getX() - center_p.getX();
+    int s_2 = start_p.getY() - center_p.getY();
+    double radius_double = sqrt( pow(s_1, 2) + pow(s_2, 2));
+    int radius = static_cast<int>(round(radius_double));
+
+    if (angle >= 360) {
+        drawCircle(center_p, radius, color);
+    }
+
+    ///////////////////////////////////////
+
+    // vector obtained from start_p, considering the center_p as the point (0,0)
+    int vector_x = start_p.getX() - center_p.getX();
+    int vector_y = start_p.getY() - center_p.getY();
+
+    int x = 0;
+    int y = radius;
+    int d = 1 - radius;
+    int delta_E = 3;
+    int delta_SE = -2 * radius + 5;
+
+    do {
+        if (calcAngle(x, y, vector_x, vector_y) <= angle) {
+            drawPixel(center_p.getX() + x, center_p.getY() + y, color);
+        }
+        if (calcAngle(y, x, vector_x, vector_y) <= angle) {
+            drawPixel(center_p.getX() + y, center_p.getY() + x, color);
+        }
+        if (calcAngle(-y, x, vector_x, vector_y) <= angle) {
+            drawPixel(center_p.getX() - y, center_p.getY() + x, color);
+        }
+        if (calcAngle(-x, y, vector_x, vector_y) <= angle) {
+            drawPixel(center_p.getX() - x, center_p.getY() + y, color);
+        }
+        if (calcAngle(-x, -y, vector_x, vector_y) <= angle) {
+            drawPixel(center_p.getX() - x, center_p.getY() - y, color);
+        }
+        if (calcAngle(-y, -x, vector_x, vector_y) <= angle) {
+            drawPixel(center_p.getX() - y, center_p.getY() - x, color);
+        }
+        if (calcAngle(y, -x, vector_x, vector_y) <= angle) {
+            drawPixel(center_p.getX() + y, center_p.getY() - x, color);
+        }
+        if (calcAngle(x, -y, vector_x, vector_y) <= angle) {
+            drawPixel(center_p.getX() + x, center_p.getY() - y, color); 
+        }
+
+        if (d < 0) {
+            d += delta_E;
+            delta_E += 2;
+            delta_SE += 2;
+        } else {
+            d += delta_SE;
+            delta_E += 2;
+            delta_SE += 4;
+            y--;
+        }
+        x++;
+    } while (y >= x);
+
 }
