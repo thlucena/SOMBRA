@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <cmath>
+#include <queue>
 #define PI 3.14159265
 
 Canvas::Canvas() {
@@ -60,6 +61,17 @@ void Canvas::drawPixel(int x, int y, Color color) {
     pixels[p_index] = color.red();
     pixels[p_index + 1] = color.green();
     pixels[p_index + 2] = color.blue();
+}
+
+Color Canvas::getPixelColorAt(int x, int y) {
+    if (!(isValidCoordinate(x, y))) {
+        return Color();
+    }
+    int p_index = y*width*3 + x*3;
+    uchar r = pixels[p_index];
+    uchar g = pixels[p_index + 1];
+    uchar b = pixels[p_index + 2];
+    return Color(r, g, b);
 }
 
 void Canvas::drawLineBresenham(Pixel start_p, Pixel end_p, Color color) {
@@ -183,7 +195,7 @@ void Canvas::drawPolyline(std::vector<Pixel>& points, Color color) {
     }
 
     for(size_t i = 0; i < points.size() - 1; i++) {
-        drawLineBresenham(points[i], points[i+1], points[i].getColor());
+        drawLineBresenham(points[i], points[i+1], color);
     }
 }
 
@@ -199,9 +211,9 @@ void Canvas::drawPolygon(std::vector<Pixel>& points, Color color) {
     }
 
     for(size_t i = 0; i < points.size() - 1; i++) {
-        drawLineBresenham(points[i], points[i+1], points[i].getColor());
+        drawLineBresenham(points[i], points[i+1], color);
     }
-    drawLineBresenham(points[points.size() - 1], points[0], points[points.size() - 1].getColor());
+    drawLineBresenham(points[points.size() - 1], points[0], color);
 }
 
 int Canvas::calcAngle(int x_1, int y_1, int x_2, int y_2) {
@@ -289,4 +301,33 @@ void Canvas::drawArc(Pixel center_p, Pixel start_p, int angle, Color color) {
         x++;
     } while (y >= x);
 
+}
+
+void Canvas::floodFill(Pixel seed_p, Color target_color, Color replacement_color) {
+    if (target_color == replacement_color) {
+        return;
+    }
+
+    std::queue<Pixel> to_print;
+    to_print.push( Pixel(seed_p.getX(), seed_p.getY(), replacement_color) );
+
+    do {
+        seed_p = to_print.front();
+        to_print.pop();
+
+        if (!isValidCoordinate(seed_p)) {
+            continue;
+        }
+
+        if (getPixelColorAt(seed_p.getX(), seed_p.getY()) != target_color) {
+            continue;
+        }
+
+        drawPixel(seed_p.getX(), seed_p.getY(), replacement_color);
+        to_print.push(seed_p.neighborN());
+        to_print.push(seed_p.neighborE());
+        to_print.push(seed_p.neighborS());
+        to_print.push(seed_p.neighborW());
+
+    } while (to_print.size() > 0);
 }

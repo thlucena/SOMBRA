@@ -16,9 +16,9 @@ class Color {
             values[G] = g;
             values[B] = b;
         }
-        uchar red() { return values[R]; }
-        uchar green() { return values[G]; }
-        uchar blue() { return values[B]; }
+        uchar red() const { return values[R]; }
+        uchar green() const { return values[G]; }
+        uchar blue() const { return values[B]; }
         uchar* getValues() {
             return values;
         }
@@ -26,6 +26,14 @@ class Color {
             values[R] = r;
             values[G] = g;
             values[B] = b;
+        }
+        bool operator == (const Color& rhs) {
+            return this->values[R] == rhs.red() &&
+                    this->values[G] == rhs.green() &&
+                    this->values[B] == rhs.blue();
+        }
+        bool operator != (const Color& rhs) {
+            return !(*this == rhs);
         }
 };
 
@@ -36,10 +44,16 @@ class Pixel {
     public:
         Pixel(int, int);
         Pixel(int, int, uchar, uchar, uchar);
+        Pixel(int, int, Color);
         int getX() const;
         int getY() const;
-        Color getColor();
+        Color getColor() const;
         void setColor(uchar, uchar, uchar);
+        void setColor(Color);
+        Pixel neighborN();
+        Pixel neighborS();
+        Pixel neighborE();
+        Pixel neighborW();
         bool operator == (const Pixel&);
         bool operator != (const Pixel&);
 };
@@ -57,11 +71,15 @@ class Canvas {
         void printToFile();
         void drawPixel(Pixel);
         void drawPixel(int, int, Color);
+        Color getPixelColorAt(int, int);
+        // 2D Primitives
         void drawLineBresenham(Pixel, Pixel, Color);
         void drawCircle(Pixel, int, Color);
         void drawPolyline(std::vector<Pixel>&, Color);
         void drawPolygon(std::vector<Pixel>&, Color);
         void drawArc(Pixel, Pixel, int, Color);
+        // Color Filling algorithms
+        void floodFill(Pixel, Color, Color);
 };
 
 #endif
