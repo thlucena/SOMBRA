@@ -427,17 +427,17 @@ void Canvas::addToPalette(std::string name, Color color) {
     palette[name] = color; 
 }
 
-Color* Canvas::getFromPalette(std::string name) {
+std::optional<Color> Canvas::getFromPalette(std::string name) {
     if (palette.find(name) != palette.end()) {
-       return &palette[name];
+       return palette[name];
     }
-    return nullptr;
+    return std::nullopt;
 }
 
-Color* Canvas::getColorFromObj(Json::Value color_obj) {
+std::optional<Color> Canvas::getColorFromObj(Json::Value color_obj) {
     if (color_obj["name"] != Json::nullValue) {
         return getFromPalette(color_obj["name"].asString());
     } else {
-        return &Color(color_obj["r"].asInt(), color_obj["g"].asInt(), color_obj["b"].asInt());
+        return Color(color_obj["r"].asInt(), color_obj["g"].asInt(), color_obj["b"].asInt());;
     }
 }

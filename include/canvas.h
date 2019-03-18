@@ -3,6 +3,7 @@
 #include <memory>
 #include <vector>
 #include <map>
+#include <optional>
 #include <json/json.h>
 
 typedef unsigned char uchar;
@@ -90,8 +91,8 @@ class Canvas {
         void applyAntiAlias();
         // Color-palette
         void addToPalette(std::string, Color);
-        Color* Canvas::getFromPalette(std::string);
-        Color* getColorFromObj(Json::Value);
+        std::optional<Color> getFromPalette(std::string);
+        std::optional<Color> getColorFromObj(Json::Value);
 };
 
 #endif
