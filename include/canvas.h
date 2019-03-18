@@ -68,7 +68,8 @@ class Canvas {
     public:
         Canvas();
         Canvas(int, int);
-        void printToFile();
+        Canvas(int, int, Color);
+        void printToFile(std::string);
         void drawPixel(Pixel);
         void drawPixel(int, int, Color);
         Color getPixelColorAt(int, int);
@@ -79,7 +80,7 @@ class Canvas {
         void drawPolygon(std::vector<Pixel>&, Color);
         void drawArc(Pixel, Pixel, int, Color);
         // Color Filling algorithms
-        void floodFill(Pixel, Color, Color);
+        void floodFill(Pixel, Color);
         // Anti-alias
         void applyAntiAlias();
 };

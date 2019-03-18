@@ -21,6 +21,18 @@ Canvas::Canvas(int w, int h) {
     std::fill(pixels.get(), pixels.get() + (width * height * 3), 255);
 }
 
+Canvas::Canvas(int w, int h, Color color) {
+    width = w;
+    height = h;
+    pixels = std::shared_ptr<uchar[]>(new uchar[width*height*3]);
+
+    for(size_t i = 0; i < width*height*3; i = i + 3) {
+       pixels[i] = color.red();
+       pixels[i+1] = color.green();
+       pixels[i+2] = color.blue();
+    }
+}
+
 bool Canvas::isValidCoordinate(Pixel point) {
     return point.getX() >= 0 && point.getX() < width && point.getY() >= 0 && point.getY() < height;
 }
@@ -29,9 +41,9 @@ bool Canvas::isValidCoordinate(int x, int y) {
     return x >= 0 && x < width && y >= 0 && y < height;
 }
 
-void Canvas::printToFile() {
+void Canvas::printToFile(std::string output_file) {
     std::ofstream outfile;
-    outfile.open("canvas.ppm");
+    outfile.open(output_file);
     outfile << "P3" << std::endl;
     outfile << width << " " << height << std::endl;
     outfile << "255" << std::endl;
@@ -301,7 +313,12 @@ void Canvas::drawArc(Pixel center_p, Pixel start_p, int angle, Color color) {
 
 }
 
-void Canvas::floodFill(Pixel seed_p, Color target_color, Color replacement_color) {
+void Canvas::floodFill(Pixel seed_p, Color replacement_color) {
+    if (!isValidCoordinate(seed_p)) {
+        return;
+    }
+
+    Color target_color = getPixelColorAt(seed_p.getX(), seed_p.getY());
     if (target_color == replacement_color) {
         return;
     }
