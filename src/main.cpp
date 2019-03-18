@@ -30,6 +30,82 @@ void processSceneFile(std::string scene_file, std::string output_file) {
     }
 
     Canvas image_canvas = Canvas(width, height, background_color);
+
+    // Parsing objects
+    if (scene["objects"] != Json::nullValue) {
+        for(int i = 0; i < scene["objects"].size(); i++) {
+            auto object = scene["objects"][i];
+
+            if(object["type"] == Json::nullValue) {
+                std::cout << ">>> Object " << i << " of objects array doesn't have a type value!" << std::endl;
+                return;
+            }
+
+            // Line
+            if(object["type"] == "line") {
+                Pixel start_p = Pixel(object["start_point"]["x"].asInt(), object["start_point"]["y"].asInt());
+                Pixel end_p = Pixel(object["end_point"]["x"].asInt(), object["end_point"]["y"].asInt());
+                Color color = Color(object["color"]["r"].asInt(), object["color"]["g"].asInt(), object["color"]["b"].asInt());
+                image_canvas.drawLineBresenham(start_p, end_p, color);
+                continue;
+            }
+
+            // Circle
+            if(object["type"] == "circle") {
+                Pixel center_p = Pixel(object["center_point"]["x"].asInt(), object["center_point"]["y"].asInt());
+                int radius = object["radius"].asInt();
+                Color color = Color(object["color"]["r"].asInt(), object["color"]["g"].asInt(), object["color"]["b"].asInt());
+                image_canvas.drawCircle(center_p, radius, color);
+                continue;
+            }
+
+            // Arc
+            if(object["type"] == "arc") {
+                Pixel center_p = Pixel(object["center_point"]["x"].asInt(), object["center_point"]["y"].asInt());
+                Pixel start_p = Pixel(object["start_point"]["x"].asInt(), object["start_point"]["y"].asInt());
+                int angle = object["angle"].asInt();
+                Color color = Color(object["color"]["r"].asInt(), object["color"]["g"].asInt(), object["color"]["b"].asInt());
+                image_canvas.drawArc(center_p, start_p, angle, color);
+                continue;
+            }
+
+            // Polyline and polygon
+            if (object["type"] == "polyline" || object["type"] == "polygon") {
+                std::vector<Pixel> points;
+                for(int i = 0; i < object["points"].size(); i++) {
+                    auto point = object["points"][i];
+                    points.push_back(Pixel(point["x"].asInt(), point["y"].asInt()));
+                }
+                Color color = Color(object["color"]["r"].asInt(), object["color"]["g"].asInt(), object["color"]["b"].asInt());
+
+                if (object["type"] == "polyline") {
+                    image_canvas.drawPolyline(points, color);
+                } else {
+                    image_canvas.drawPolygon(points, color);
+                }
+                
+                continue;
+            }            
+        }
+    }
+
+    // Parsing color fills
+    if (scene["color_fills"] != Json::nullValue) {
+        for(int i = 0; i < scene["color_fills"].size(); i++) {
+            auto seed_obj = scene["color_fills"][i]["seed"];
+            auto color_obj = scene["color_fills"][i]["color"];
+
+            Pixel seed_p = Pixel(seed_obj["x"].asInt(), seed_obj["y"].asInt());
+            Color color = Color(color_obj["r"].asInt(), color_obj["g"].asInt(), color_obj["b"].asInt());
+            image_canvas.floodFill(seed_p, color);
+        }
+    }
+
+    // Parsing anti-alias option
+    if (scene["anti_alias"] != Json::nullValue && scene["anti_alias"] == "on") {
+        image_canvas.applyAntiAlias();
+    }
+    
     image_canvas.printToFile(output_file);
 }
 
