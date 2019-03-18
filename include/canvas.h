@@ -2,6 +2,8 @@
 #define _CANVAS_
 #include <memory>
 #include <vector>
+#include <map>
+#include <json/json.h>
 
 typedef unsigned char uchar;
 enum RGB { R = 0, G, B };
@@ -62,6 +64,8 @@ class Canvas {
     private:
         int width, height;
         std::shared_ptr<uchar[]> pixels;
+        Color background_color;
+        std::map<std::string, Color> palette;
         bool isValidCoordinate(Pixel);
         bool isValidCoordinate(int, int);
         int calcAngle(int, int, int, int);
@@ -69,6 +73,7 @@ class Canvas {
         Canvas();
         Canvas(int, int);
         Canvas(int, int, Color);
+        void setBackground(Color);
         void printToFile(std::string);
         void drawPixel(Pixel);
         void drawPixel(int, int, Color);
@@ -83,6 +88,10 @@ class Canvas {
         void floodFill(Pixel, Color);
         // Anti-alias
         void applyAntiAlias();
+        // Color-palette
+        void addToPalette(std::string, Color);
+        Color* Canvas::getFromPalette(std::string);
+        Color* getColorFromObj(Json::Value);
 };
 
 #endif

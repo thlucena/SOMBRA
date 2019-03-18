@@ -10,6 +10,7 @@
 Canvas::Canvas() {
     width = 800;
     height = 600;
+    background_color = Color(255, 255, 255);
     pixels = std::shared_ptr<uchar[]>(new uchar[width*height*3]);
     std::fill(pixels.get(), pixels.get() + (width * height * 3), 255);
 }
@@ -17,6 +18,7 @@ Canvas::Canvas() {
 Canvas::Canvas(int w, int h) {
     width = w;
     height = h;
+    background_color = Color(255, 255, 255);
     pixels = std::shared_ptr<uchar[]>(new uchar[width*height*3]);
     std::fill(pixels.get(), pixels.get() + (width * height * 3), 255);
 }
@@ -24,13 +26,27 @@ Canvas::Canvas(int w, int h) {
 Canvas::Canvas(int w, int h, Color color) {
     width = w;
     height = h;
+    background_color = color;
     pixels = std::shared_ptr<uchar[]>(new uchar[width*height*3]);
 
     for(size_t i = 0; i < width*height*3; i = i + 3) {
-       pixels[i] = color.red();
-       pixels[i+1] = color.green();
-       pixels[i+2] = color.blue();
+        pixels[i] = color.red();
+        pixels[i+1] = color.green();
+        pixels[i+2] = color.blue();
     }
+}
+
+void Canvas::setBackground(Color new_color) {
+    Color curr_c;
+    for(size_t i = 0; i < width*height*3; i = i + 3) {
+        curr_c = Color(pixels[i], pixels[i+1], pixels[i+2]);
+        if (curr_c == background_color) {
+            pixels[i] = new_color.red();
+            pixels[i+1] = new_color.green();
+            pixels[i+2] = new_color.blue();
+        }
+    }
+    background_color = new_color;
 }
 
 bool Canvas::isValidCoordinate(Pixel point) {
@@ -405,4 +421,23 @@ void Canvas::applyAntiAlias() {
     }
     
     pixels = std::shared_ptr<uchar[]>(new_pixels);
+}
+
+void Canvas::addToPalette(std::string name, Color color) {
+    palette[name] = color; 
+}
+
+Color* Canvas::getFromPalette(std::string name) {
+    if (palette.find(name) != palette.end()) {
+       return &palette[name];
+    }
+    return nullptr;
+}
+
+Color* Canvas::getColorFromObj(Json::Value color_obj) {
+    if (color_obj["name"] != Json::nullValue) {
+        return getFromPalette(color_obj["name"].asString());
+    } else {
+        return &Color(color_obj["r"].asInt(), color_obj["g"].asInt(), color_obj["b"].asInt());
+    }
 }

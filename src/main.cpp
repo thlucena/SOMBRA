@@ -22,14 +22,28 @@ void processSceneFile(std::string scene_file, std::string output_file) {
 
     int width = scene["width"].asInt();
     int height = scene["height"].asInt();
-    Color background_color = Color(255,255,255);
+    Canvas image_canvas = Canvas(width, height);
 
-    if (scene["background_color"] != Json::nullValue) {
-        Json::Value b_color = scene["background_color"];
-        background_color = Color(b_color["r"].asInt(), b_color["g"].asInt(), b_color["b"].asInt());
+    // Color-palette
+    if (scene["color_palette"] != Json::nullValue) {
+        for(int i = 0; i < scene["color_palette"].size(); i++) {
+            auto color_p_obj = scene["color_palette"][i];
+            Color color = Color(color_p_obj["r"].asInt(), color_p_obj["g"].asInt(), color_p_obj["b"].asInt());
+            image_canvas.addToPalette(color_p_obj["name"].asString(), color);
+        }
     }
 
-    Canvas image_canvas = Canvas(width, height, background_color);
+    // Background color
+    if (scene["background_color"] != Json::nullValue) {
+        auto b_color_obj = scene["background_color"];
+        Color* b_color = image_canvas.getColorFromObj(b_color_obj);
+        if (b_color == nullptr) {
+            std::cout << ">>> '" << b_color_obj["name"].asString() << "' color not defined on palette!" << std::endl;
+            return;
+        }
+        image_canvas.setBackground(*b_color);
+    }
+
 
     // Parsing objects
     if (scene["objects"] != Json::nullValue) {
@@ -45,8 +59,16 @@ void processSceneFile(std::string scene_file, std::string output_file) {
             if(object["type"] == "line") {
                 Pixel start_p = Pixel(object["start_point"]["x"].asInt(), object["start_point"]["y"].asInt());
                 Pixel end_p = Pixel(object["end_point"]["x"].asInt(), object["end_point"]["y"].asInt());
-                Color color = Color(object["color"]["r"].asInt(), object["color"]["g"].asInt(), object["color"]["b"].asInt());
-                image_canvas.drawLineBresenham(start_p, end_p, color);
+                // Color color = Color(object["color"]["r"].asInt(), object["color"]["g"].asInt(), object["color"]["b"].asInt());
+
+                auto color_obj = object["color"];
+                Color* color = image_canvas.getColorFromObj(color_obj);
+                if (color == nullptr) {
+                    std::cout << ">>> '" << color_obj["name"].asString() << "' color not defined on palette!" << std::endl;
+                    return;
+                }
+
+                image_canvas.drawLineBresenham(start_p, end_p, *color);
                 continue;
             }
 
@@ -54,8 +76,15 @@ void processSceneFile(std::string scene_file, std::string output_file) {
             if(object["type"] == "circle") {
                 Pixel center_p = Pixel(object["center_point"]["x"].asInt(), object["center_point"]["y"].asInt());
                 int radius = object["radius"].asInt();
-                Color color = Color(object["color"]["r"].asInt(), object["color"]["g"].asInt(), object["color"]["b"].asInt());
-                image_canvas.drawCircle(center_p, radius, color);
+                // Color color = Color(object["color"]["r"].asInt(), object["color"]["g"].asInt(), object["color"]["b"].asInt());
+                auto color_obj = object["color"];
+                Color* color = image_canvas.getColorFromObj(color_obj);
+                if (color == nullptr) {
+                    std::cout << ">>> '" << color_obj["name"].asString() << "' color not defined on palette!" << std::endl;
+                    return;
+                }
+
+                image_canvas.drawCircle(center_p, radius, *color);
                 continue;
             }
 
@@ -64,8 +93,14 @@ void processSceneFile(std::string scene_file, std::string output_file) {
                 Pixel center_p = Pixel(object["center_point"]["x"].asInt(), object["center_point"]["y"].asInt());
                 Pixel start_p = Pixel(object["start_point"]["x"].asInt(), object["start_point"]["y"].asInt());
                 int angle = object["angle"].asInt();
-                Color color = Color(object["color"]["r"].asInt(), object["color"]["g"].asInt(), object["color"]["b"].asInt());
-                image_canvas.drawArc(center_p, start_p, angle, color);
+                // Color color = Color(object["color"]["r"].asInt(), object["color"]["g"].asInt(), object["color"]["b"].asInt());
+                auto color_obj = object["color"];
+                Color* color = image_canvas.getColorFromObj(color_obj);
+                if (color == nullptr) {
+                    std::cout << ">>> '" << color_obj["name"].asString() << "' color not defined on palette!" << std::endl;
+                    return;
+                }
+                image_canvas.drawArc(center_p, start_p, angle, *color);
                 continue;
             }
 
@@ -76,12 +111,19 @@ void processSceneFile(std::string scene_file, std::string output_file) {
                     auto point = object["points"][i];
                     points.push_back(Pixel(point["x"].asInt(), point["y"].asInt()));
                 }
-                Color color = Color(object["color"]["r"].asInt(), object["color"]["g"].asInt(), object["color"]["b"].asInt());
+                // Color color = Color(object["color"]["r"].asInt(), object["color"]["g"].asInt(), object["color"]["b"].asInt());
+
+                auto color_obj = object["color"];
+                Color* color = image_canvas.getColorFromObj(color_obj);
+                if (color == nullptr) {
+                    std::cout << ">>> '" << color_obj["name"].asString() << "' color not defined on palette!" << std::endl;
+                    return;
+                }
 
                 if (object["type"] == "polyline") {
-                    image_canvas.drawPolyline(points, color);
+                    image_canvas.drawPolyline(points, *color);
                 } else {
-                    image_canvas.drawPolygon(points, color);
+                    image_canvas.drawPolygon(points, *color);
                 }
                 
                 continue;
@@ -96,8 +138,14 @@ void processSceneFile(std::string scene_file, std::string output_file) {
             auto color_obj = scene["color_fills"][i]["color"];
 
             Pixel seed_p = Pixel(seed_obj["x"].asInt(), seed_obj["y"].asInt());
-            Color color = Color(color_obj["r"].asInt(), color_obj["g"].asInt(), color_obj["b"].asInt());
-            image_canvas.floodFill(seed_p, color);
+            // Color color = Color(color_obj["r"].asInt(), color_obj["g"].asInt(), color_obj["b"].asInt());
+            // auto color_obj = object["color"];
+            Color* color = image_canvas.getColorFromObj(color_obj);
+            if (color == nullptr) {
+                std::cout << ">>> '" << color_obj["name"].asString() << "' color not defined on palette!" << std::endl;
+                return;
+            }
+            image_canvas.floodFill(seed_p, *color);
         }
     }
 
