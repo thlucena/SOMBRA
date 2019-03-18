@@ -77,13 +77,11 @@ Color Canvas::getPixelColorAt(int x, int y) {
 void Canvas::drawLineBresenham(Pixel start_p, Pixel end_p, Color color) {
     // check if start_p is valid
     if (!isValidCoordinate(start_p)) {
-        std::cout << "S";
         return;
     }
 
     // check if end_p is valid
     if (!isValidCoordinate(end_p)) {
-        std::cout << "E";
         return;
     }
 
@@ -330,4 +328,64 @@ void Canvas::floodFill(Pixel seed_p, Color target_color, Color replacement_color
         to_print.push(seed_p.neighborW());
 
     } while (to_print.size() > 0);
+}
+
+void Canvas::applyAntiAlias() {
+    uchar *new_pixels = new uchar[width*height*3];
+
+    // Filling first and last rows
+    for(int i = 0; i < width; i++) {
+        /* code */
+        int i_first_row = i*width*3 + 0*3;
+        int i_last_row = i*width*3 + (height-1)*3;
+        new_pixels[i_first_row] = pixels[i_first_row];
+        new_pixels[i_first_row + 1] = pixels[i_first_row + 1];
+        new_pixels[i_first_row + 2] = pixels[i_first_row + 2];
+        new_pixels[i_last_row] = pixels[i_last_row];
+        new_pixels[i_last_row + 1] = pixels[i_last_row + 1];
+        new_pixels[i_last_row + 2] = pixels[i_last_row + 2];
+    }
+
+    // Filling first and last columns
+    for(int i = 1; i < height - 1; i++) {
+        /* code */
+        int i_first_row = 0*width*3 + i*3;
+        int i_last_row = (width-1)*width*3 + i*3;
+        new_pixels[i_first_row] = pixels[i_first_row];
+        new_pixels[i_first_row + 1] = pixels[i_first_row + 1];
+        new_pixels[i_first_row + 2] = pixels[i_first_row + 2];
+        new_pixels[i_last_row] = pixels[i_last_row];
+        new_pixels[i_last_row + 1] = pixels[i_last_row + 1];
+        new_pixels[i_last_row + 2] = pixels[i_last_row + 2];
+    }
+
+    double sum_R, sum_G, sum_B;
+    int weights[] = {1, 2, 1, 2, 4, 2, 1, 2, 1};
+    Color aux_c;
+    int neighbor_i;
+
+    for(int x = 1; x < width - 1; x++) {
+        for(int y = 1; y < height - 1; y++) {
+            sum_R = 0;
+            sum_G = 0;
+            sum_B = 0;
+            neighbor_i = 0;
+            for (int x_offset = -1; x_offset <= 1; x_offset++) {
+                for (int y_offset = -1; y_offset <= 1; y_offset++) {
+                    aux_c = getPixelColorAt(x + x_offset, y + y_offset);
+                    sum_R += aux_c.red() * weights[neighbor_i];
+                    sum_G += aux_c.green() * weights[neighbor_i];
+                    sum_B += aux_c.blue() * weights[neighbor_i];
+                    neighbor_i++;
+                }
+            }
+
+            int p_index = y*width*3 + x*3;
+            new_pixels[p_index] = static_cast<uchar>(round(sum_R / 16));
+            new_pixels[p_index + 1] = static_cast<uchar>(round(sum_G / 16));
+            new_pixels[p_index + 2] = static_cast<uchar>(round(sum_B / 16));
+        }
+    }
+    
+    pixels = std::shared_ptr<uchar[]>(new_pixels);
 }

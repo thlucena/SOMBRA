@@ -80,6 +80,8 @@ class Canvas {
         void drawArc(Pixel, Pixel, int, Color);
         // Color Filling algorithms
         void floodFill(Pixel, Color, Color);
+        // Anti-alias
+        void applyAntiAlias();
 };
 
 #endif
