@@ -1,6 +1,8 @@
 # SOMBRA
 Simple Objects Minimal Bidimensional RAsterizer (SOMBRA) is a C++ 2D rasterizer able to draw a scene with simple objects and color them. The scene description must be provided in a JSON file with the specific structure designed for SOMBRA features.
 
+![pinkfloyd](samples/pinkfloyd.ppm)
+
 ## Features
 * [X] 2D Primitives (single pixel thickness)
     * [x] Line segment 
@@ -33,7 +35,7 @@ Access the project root folder and build the project running:
 Then, run the executable passing the scene description file and the name of the output image file as parameters:
 
 ```bash
-    ./my_executable scene.json img.ppm
+    ./my_executable /samples/pinkfloyd.json pinkfloyd.ppm
 ```
 
 The scene description must be a .json file, and the output image must be a .ppm file.

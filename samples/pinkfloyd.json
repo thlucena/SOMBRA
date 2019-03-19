@@ -1,0 +1,334 @@
+{
+    "color_palette" : [
+        {
+            "name" : "black",
+            "r": 0,
+            "g": 0,
+            "b": 0
+        },
+        {
+            "name" : "white",
+            "r": 255,
+            "g": 255,
+            "b": 255
+        },
+        {
+            "name" : "greyish",
+            "r": 199,
+            "g": 202,
+            "b": 204
+        },
+        {
+            "name" : "red",
+            "r": 234,
+            "g": 13,
+            "b": 0
+        },
+        {
+            "name" : "orange",
+            "r": 242,
+            "g": 139,
+            "b": 32
+        },
+        {
+            "name" : "yellow",
+            "r": 253,
+            "g": 249,
+            "b": 1
+        },
+        {
+            "name" : "green",
+            "r": 102,
+            "g": 204,
+            "b": 9
+        },
+        {
+            "name" : "blue",
+            "r": 6,
+            "g": 202,
+            "b": 222
+        },
+        {
+            "name" : "purple",
+            "r": 133,
+            "g": 74,
+            "b": 136
+        }
+    ],
+    "width": 900,
+    "height": 900,
+    "background_color": {
+      "name": "black"
+    },
+    "anti_alias": "on",
+    "objects": [
+        { 
+            // triangle
+            "type": "polygon",
+            "points": [
+                {
+                    "x": 450,
+                    "y": 140
+                },
+                {
+                    "x": 300,
+                    "y": 400
+                },
+                {
+                    "x": 600,
+                    "y": 400
+                }
+            ],
+            "color": {
+                "name": "white"
+            }
+        },
+        {
+            // top left line
+            "type": "line",
+            "start_point": {
+                "x": 0,
+                "y": 395
+            },
+            "end_point": {
+                "x": 378,
+                "y": 265
+            },
+            "color": {
+                "name": "white"
+            }
+        },
+        {
+            // top inside line
+            "type": "line",
+            "start_point": {
+                "x": 378,
+                "y": 265
+            },
+            "end_point": {
+                "x": 510,
+                "y": 245
+            },
+            "color": {
+                "name": "white"
+            }
+        },
+        {
+            // bottom left line
+            "type": "line",
+            "start_point": {
+                "x": 0,
+                "y": 400
+            },
+            "end_point": {
+                "x": 375,
+                "y": 270
+            },
+            "color": {
+                "name": "white"
+            }
+        },
+        {
+            // bottom inside line
+            "type": "line",
+            "start_point": {
+                "x": 375,
+                "y": 270
+            },
+            "end_point": {
+                "x": 540,
+                "y": 295
+            },
+            "color": {
+                "name": "white"
+            }
+        },
+        {
+            // right red line
+            "type": "line",
+            "start_point": {
+                "x": 512,
+                "y": 246
+            },
+            "end_point": {
+                "x": 899,
+                "y": 345
+            },
+            "color": {
+                "name": "red"
+            }
+        },
+        {
+            // right orange line
+            "type": "line",
+            "start_point": {
+                "x": 516,
+                "y": 253
+            },
+            "end_point": {
+                "x": 899,
+                "y": 353
+            },
+            "color": {
+                "name": "orange"
+            }
+        },
+        {
+            // right yellow line
+            "type": "line",
+            "start_point": {
+                "x": 520,
+                "y": 260
+            },
+            "end_point": {
+                "x": 899,
+                "y": 361
+            },
+            "color": {
+                "name": "yellow"
+            }
+        },
+        {
+            // right green line
+            "type": "line",
+            "start_point": {
+                "x": 526,
+                "y": 270
+            },
+            "end_point": {
+                "x": 899,
+                "y": 368
+            },
+            "color": {
+                "name": "green"
+            }
+        },
+        {
+            // right blue line
+            "type": "line",
+            "start_point": {
+                "x": 531,
+                "y": 278
+            },
+            "end_point": {
+                "x": 899,
+                "y": 376
+            },
+            "color": {
+                "name": "blue"
+            }
+        },
+        {
+            // right purple top line
+            "type": "line",
+            "start_point": {
+                "x": 535,
+                "y": 286
+            },
+            "end_point": {
+                "x": 899,
+                "y": 384
+            },
+            "color": {
+                "name": "purple"
+            }
+        },
+        {
+            // right purple bottom line
+            "type": "line",
+            "start_point": {
+                "x": 540,
+                "y": 295
+            },
+            "end_point": {
+                "x": 899,
+                "y": 393
+            },
+            "color": {
+                "name": "purple"
+            }
+        }
+    ],
+    "color_fills": [
+        {
+            // left line
+            "seed": {
+                "x": 0,
+                "y": 396
+            },
+            "color": {
+                "name": "white"
+            }
+        },
+        {
+            // inside line
+            "seed": {
+                "x": 378,
+                "y": 266
+            },
+            "color": {
+                "name": "greyish"
+            }
+        },
+        {
+            // red line
+            "seed": {
+                "x": 899,
+                "y": 346
+            },
+            "color": {
+                "name": "red"
+            }
+        },
+        {
+            // orange line
+            "seed": {
+                "x": 899,
+                "y": 354
+            },
+            "color": {
+                "name": "orange"
+            }
+        },
+        {
+            // yellow line
+            "seed": {
+                "x": 899,
+                "y": 362
+            },
+            "color": {
+                "name": "yellow"
+            }
+        },
+        {
+            // green line
+            "seed": {
+                "x": 899,
+                "y": 369
+            },
+            "color": {
+                "name": "green"
+            }
+        },
+        {
+            // blue line
+            "seed": {
+                "x": 899,
+                "y": 378
+            },
+            "color": {
+                "name": "blue"
+            }
+        },
+        {
+            // purple line
+            "seed": {
+                "x": 899,
+                "y": 385
+            },
+            "color": {
+                "name": "purple"
+            }
+        }
+    ]
+}
