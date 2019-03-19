@@ -1,140 +1,144 @@
 {
-    "color_palette" : [
-        {
-            "name" : "blue",
-            "r" : 0,
-            "g" : 0,
-            "b" : 255
-        },
-        {
-            "name" : "yellowish",
-            "r" : 255,
-            "g" : 255,
-            "b" : 125
-        }
-    ],
-    "width" : 800,
-    "height" : 800,
-    "background_color": {
-        "r":255,
-        "g":255,
-        "b":255     
+  "color_palette": [
+    {
+      "name": "blue",
+      "r": 0,
+      "g": 0,
+      "b": 255
     },
-    "anti_alias" : "off",
-    "objects" : [
+    {
+      "name": "yellowish",
+      "r": 255,
+      "g": 255,
+      "b": 125
+    },
+    {
+      "name": "white",
+      "r": 255,
+      "g": 255,
+      "b": 255
+    }
+  ],
+  "width": 800,
+  "height": 800,
+  "background_color": {
+    "name": "white"
+  },
+  "anti_alias": "on",
+  "objects": [
+    {
+      "type": "line",
+      "start_point": {
+        "x": 0,
+        "y": 0
+      },
+      "end_point": {
+        "x": 400,
+        "y": 400
+      },
+      "color": {
+        "r": 100,
+        "g": 100,
+        "b": 100
+      }
+    },
+    {
+      "type": "circle",
+      "center_point": {
+        "x": 400,
+        "y": 400
+      },
+      "radius": 75,
+      "color": {
+        "r": 0,
+        "g": 0,
+        "b": 0
+      }
+    },
+    {
+      "type": "arc",
+      "center_point": {
+        "x": 500,
+        "y": 350
+      },
+      "start_point": {
+        "x": 500,
+        "y": 50
+      },
+      "angle": 180,
+      "color": {
+        "r": 255,
+        "g": 255,
+        "b": 0
+      }
+    },
+    {
+      "type": "polyline",
+      "points": [
         {
-            "type" : "line",
-            "start_point" : {
-                "x" : 0,
-                "y" : 0
-            },
-            "end_point" : {
-                "x" : 400,
-                "y" : 400
-            },
-            "color" : {
-                "r":100,
-                "g":100,
-                "b":100     
-            }            
+          "x": 130,
+          "y": 50
         },
         {
-            "type" : "circle",
-            "center_point" : {
-                "x" : 400,
-                "y" : 400
-            },
-            "radius" : 75,
-            "color" : {
-                "r":0,
-                "g":0,
-                "b":0     
-            }            
+          "x": 352,
+          "y": 5
         },
         {
-            "type" : "arc",
-            "center_point" : {
-                "x" : 500,
-                "y" : 350
-            },
-            "start_point" : {
-                "x" : 500,
-                "y" : 50
-            },
-            "angle" : 180,
-            "color" : {
-                "r":255,
-                "g":255,
-                "b":0     
-            }            
-        },
-        {
-            "type" : "polyline",
-            "points" : [
-                {
-                    "x" : 130,
-                    "y" : 50
-                },
-                {
-                    "x" : 352,
-                    "y" : 5
-                },
-                {
-                    "x" : 402,
-                    "y" : 712
-                }
-            ],
-            "color" : {
-                "r":145,
-                "g":186,
-                "b":32     
-            }            
-        },
-        {
-            "type" : "polygon",
-            "points" : [
-                {
-                    "x" : 156,
-                    "y" : 210
-                },
-                {
-                    "x" : 30,
-                    "y" : 501
-                },
-                {
-                    "x" : 352,
-                    "y" : 563
-                },
-                {
-                    "x" : 402,
-                    "y" : 712
-                }
-            ],
-            "color" : {
-                "r":242,
-                "g":89,
-                "b":74     
-            }            
+          "x": 402,
+          "y": 712
         }
-    ],
-    "color_fills" : [
+      ],
+      "color": {
+        "r": 145,
+        "g": 186,
+        "b": 32
+      }
+    },
+    {
+      "type": "polygon",
+      "points": [
         {
-            "seed" : { 
-                "x" : 10,
-                "y" : 5
-            },
-            "color" : {
-                "name" : "yellowish"
-            }
+          "x": 156,
+          "y": 210
         },
         {
-            "seed" : { 
-                "x" : 400,
-                "y" : 399
-            },
-            "color" : {
-                "name" : "blue"
-            }
+          "x": 30,
+          "y": 501
+        },
+        {
+          "x": 352,
+          "y": 563
+        },
+        {
+          "x": 402,
+          "y": 712
         }
-    ]
+      ],
+      "color": {
+        "r": 242,
+        "g": 89,
+        "b": 74
+      }
+    }
+  ],
+  "color_fills": [
+    {
+      "seed": {
+        "x": 10,
+        "y": 5
+      },
+      "color": {
+        "name": "yellowish"
+      }
+    },
+    {
+      "seed": {
+        "x": 400,
+        "y": 399
+      },
+      "color": {
+        "name": "blue"
+      }
+    }
+  ]
 }
