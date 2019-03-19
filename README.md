@@ -261,7 +261,7 @@ Used to apply the anti-alias algorithm after the drawing of all the objects on c
 Array of objects that should be drawn on canvas. Each object is itself a JSON object and must have a **type** attribute indicating which primitive it is describing, along with its peculiar attributes. The possible types are **line**, **circle**, **arc**, **polyline** and **polygon**. Each of these types will be described below.
 
 #### line type
-Describe a line on canvas. It must have a start point and an end point positive integer coordinates, along with a *color object*.
+Describe a line on canvas using Bresenham algorithm. It must have a starting point and an ending point positive integer coordinates, along with a *color object*.
 
 ```json
 {
@@ -323,7 +323,7 @@ Describe an arc on canvas. It must have a center point with positive integer coo
 ```
 
 #### polyline type
-Describe a polyline on canvas, which is a sequence of points connected. It must have an array of points, each one with positive integer coordinates, and *color object*.
+Describe a polyline on canvas, which is a sequence of points connected. It must have an array of points, each one with positive integer coordinates, and a *color object*.
 
 ```json
 {
@@ -351,7 +351,7 @@ Describe a polyline on canvas, which is a sequence of points connected. It must 
 ```
 
 #### polygon type
-Describe a polygon on canvas, which is a sequence of points connected, with the last point connected to the first one. It must have an array of points, each one with positive integer coordinates, and *color object*.
+Describe a polygon on canvas, which is a sequence of points connected, with the last point connected to the first one. It must have an array of points, each one with positive integer coordinates, and a *color object*.
 
 ```json
 {
