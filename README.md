@@ -1,7 +1,7 @@
 # SOMBRA
 Simple Objects Minimal Bidimensional RAsterizer (SOMBRA) is a C++ 2D rasterizer able to draw a scene with simple objects and color them. The scene description must be provided in a JSON file with the specific structure designed for SOMBRA features.
 
-![pinkfloyd](samples/pinkfloyd.ppm)
+![pinkfloyd](samples/pinkfloyd.png)
 
 ## Features
 * [X] 2D Primitives (single pixel thickness)
